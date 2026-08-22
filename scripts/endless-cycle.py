@@ -53,7 +53,7 @@ def get_asset(filename):
     # 3. Clean up the path (resolves the '..' into a proper absolute path)
     return os.path.abspath(asset_path)
 
-def find_and_click(image_name, click_delay=0.5):
+def find_and_click(image_name, click_delay=0.5, shift=False):
     try:
         # confidence=0.8 allows for slight color/rendering differences
         # This is almost mandatory on macOS
@@ -67,7 +67,11 @@ def find_and_click(image_name, click_delay=0.5):
             mac_y = location.y / 2
             
             pyautogui.moveTo(mac_x, mac_y, duration=0.2)
+
+            if shift: pyautogui.keyDown('shift')
             pyautogui.click()
+            if shift: pyautogui.keyUp('shift')
+            
             print(f"Successfully clicked {image_name}")
             time.sleep(click_delay)
             return True
@@ -89,7 +93,7 @@ def step(s):
     if s == 0:
         find_and_click(get_asset("buy_all.png"), 0.2)
     elif s == 1:
-        find_and_click(get_asset("cursor.png"), 0.2)
+        find_and_click(get_asset("cursor.png"), 0.2, shift=True)
 
     return True
 
