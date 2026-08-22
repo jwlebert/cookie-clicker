@@ -100,26 +100,30 @@ def step(s):
 
     if s == 0:
         find_and_click(get_asset("buy_all.png"), 0.2)
-    elif s == 1:
         find_and_click(get_asset("cursor.png"), 0.2, shift=True)
-    elif s == 2: 
+    if s == 1:
+        find_and_click(get_asset("buy_all.png"), 0.2)
+        find_and_click(get_asset("cursor.png"), 0.2, shift=True)
+    elif s == 2:
         pyautogui.scroll(-10)
-    elif s == 3:
+    elif s == 3: 
         find_and_click(get_asset("prism.png"), 0.2, shift=True)
-    elif s == 4: 
+        find_and_click(get_asset("fractal.png"), 0.2, shift=True)
+    elif s == 4:
         pyautogui.scroll(-10)
-    elif s == 5:
+    elif s == 5: 
         find_and_click(get_asset("you.png"), 0.2, shift=True)
     elif s == 6:
         pyautogui.scroll(25)
     elif s == 7:
         find_and_click(get_asset("buy_all.png"), 0.2)
-    elif s == 8:
+        time.sleep(3.0)
         find_and_click(get_asset("buy_all.png"), 0.2)
+        
     return True
 
 cur_step = 0
 while True:
     if step(cur_step):
         cur_step = (cur_step + 1) % TOTAL_STEPS
-    time.sleep(2)
+    time.sleep(1)
