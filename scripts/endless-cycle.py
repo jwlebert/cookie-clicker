@@ -53,12 +53,20 @@ def get_asset(filename):
     # 3. Clean up the path (resolves the '..' into a proper absolute path)
     return os.path.abspath(asset_path)
 
-def find_and_click(image_name, click_delay=0.5, shift=False):
+def find_and_click(image_name, click_delay=0.5, double_move=True, shift=False):
     try:
         # confidence=0.8 allows for slight color/rendering differences
         # This is almost mandatory on macOS
         location = pyautogui.locateCenterOnScreen(image_name, confidence=0.8)
-        
+
+        if double_move and location is not None:
+            mac_x = location.x / 2
+            mac_y = location.y / 2
+            
+            pyautogui.moveTo(mac_x, mac_y, duration=0.0)
+
+            location = pyautogui.locateCenterOnScreen(image_name, confidence=0.8)
+            
         if location is not None:
             # IMPORTANT MAC NOTE: 
             # Retina displays double the screen resolution. 
@@ -66,7 +74,7 @@ def find_and_click(image_name, click_delay=0.5, shift=False):
             mac_x = location.x / 2
             mac_y = location.y / 2
             
-            pyautogui.moveTo(mac_x, mac_y, duration=0.2)
+            pyautogui.moveTo(mac_x, mac_y, duration=0.1)
 
             if shift: pyautogui.keyDown('shift')
             pyautogui.click()
@@ -101,4 +109,4 @@ cur_step = 0
 while True:
     if step(cur_step):
         cur_step = (cur_step + 1) % TOTAL_STEPS
-    time.sleep(3)
+    time.sleep(2)
