@@ -53,7 +53,7 @@ def get_asset(filename):
     # 3. Clean up the path (resolves the '..' into a proper absolute path)
     return os.path.abspath(asset_path)
 
-def find_and_click(image_name, click_delay=0.5, double_move=True, shift=False):
+def find_and_click(image_name, click_delay=0.5, double_move=False, shift=False):
     try:
         # confidence=0.8 allows for slight color/rendering differences
         # This is almost mandatory on macOS
@@ -100,10 +100,10 @@ def step(s):
 
     if s == 0:
         find_and_click(get_asset("buy_all.png"), 0.2)
-        find_and_click(get_asset("cursor.png"), 0.2, shift=True)
+        find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
     if s == 1:
         find_and_click(get_asset("buy_all.png"), 0.2)
-        find_and_click(get_asset("cursor.png"), 0.2, shift=True)
+        find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
     elif s == 2:
         pyautogui.scroll(-10)
     elif s == 3: 
@@ -116,9 +116,9 @@ def step(s):
     elif s == 6:
         pyautogui.scroll(25)
     elif s == 7:
-        find_and_click(get_asset("buy_all.png"), 0.2)
-        time.sleep(3.0)
-        find_and_click(get_asset("buy_all.png"), 0.2)
+        find_and_click(get_asset("buy_all.png"), 0.2, double_move=True)
+    elif s == 8:
+        find_and_click(get_asset("buy_all.png"), 0.2, double_move=True)
         
     return True
 
