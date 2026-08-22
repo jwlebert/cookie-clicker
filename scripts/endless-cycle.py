@@ -42,3 +42,18 @@ def in_cookie_clicker():
 
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
+
+TOTAL_STEPS = 2
+def step(s):
+    if not (in_cookie_clicker() and active): return False
+
+    if s == 1:
+        print("todo")   
+    elif s == 2:
+        print("todo 2")
+
+cur_step = 0
+while True:
+    if step(cur_step):
+        cur_step = (cur_step + 1) % TOTAL_STEPS
+    time.sleep(1)
