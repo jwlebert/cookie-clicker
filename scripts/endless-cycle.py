@@ -2,6 +2,8 @@
 # dependencies = [
 #     "pyautogui",
 #     "pynput",
+#     "Pillow",
+#     "opencv-python",
 # ]
 # ///
 
@@ -39,6 +41,32 @@ def get_active_app():
 
 def in_cookie_clicker():
     return get_active_app() == "Cookie Clicker"
+
+def find_and_click(image_name, click_delay=0.5):
+    try:
+        # confidence=0.8 allows for slight color/rendering differences
+        # This is almost mandatory on macOS
+        location = pyautogui.locateCenterOnScreen(image_name, confidence=0.8)
+        
+        if location is not None:
+            # IMPORTANT MAC NOTE: 
+            # Retina displays double the screen resolution. 
+            # You usually have to divide the found coordinates by 2 to click the right spot.
+            mac_x = location.x / 2
+            mac_y = location.y / 2
+            
+            pyautogui.moveTo(mac_x, mac_y, duration=0.2)
+            pyautogui.click()
+            print(f"Successfully clicked {image_name}")
+            time.sleep(click_delay)
+            return True
+        else:
+            print(f"Could not see {image_name} on screen.")
+            return False
+            
+    except Exception as e:
+        print(f"Error finding {image_name}: {e}")
+        return False
 
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
