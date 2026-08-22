@@ -94,15 +94,15 @@ def find_and_click(image_name, click_delay=0.5, double_move=False, shift=False):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-TOTAL_STEPS = 12
+TOTAL_STEPS = 10
 def step(s):
     if not (in_cookie_clicker() and active): return False
 
     if s == 0:
         find_and_click(get_asset("buy_all.png"), 0.2)
         find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
-    if s == 1:
         find_and_click(get_asset("buy_all.png"), 0.2)
+    if s == 1:
         find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
     elif s == 2:
         pyautogui.scroll(-10)
@@ -117,18 +117,17 @@ def step(s):
         pyautogui.scroll(25)
     elif s == 7:
         find_and_click(get_asset("buy_all.png"), 0.2, double_move=True)
+        time.sleep(1.0)
     elif s == 8:
-        find_and_click(get_asset("buy_all.png"), 0.2, double_move=True)
-    elif s == 9:
         find_and_click(get_asset("legacy.png"), 0.2)
         pyautogui.keyDown('enter')
         pyautogui.keyUp('enter')
-    elif s == 10:
+        time.sleep(2)
+    elif s == 9:
         find_and_click(get_asset("reincarnate.png"), 0.2)
         pyautogui.keyDown('enter')
         pyautogui.keyUp('enter')
-    elif s == 11:
-        time.sleep(3)
+        time.sleep(2)
         
     return True
 
