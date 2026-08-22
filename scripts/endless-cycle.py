@@ -7,6 +7,7 @@
 
 from pynput import keyboard
 import pyautogui
+import subprocess
 import time
 import os
 
@@ -26,3 +27,6 @@ def on_press(key):
             active = not active
     except AttributeError:
         pass
+
+listener = keyboard.Listener(on_press=on_press)
+listener.start()
