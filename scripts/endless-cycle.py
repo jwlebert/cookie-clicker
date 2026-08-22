@@ -118,11 +118,12 @@ def step(s):
     elif s == 7:
         find_and_click(get_asset("buy_all.png"), 0.2, double_move=True)
         time.sleep(1.0)
+        pyautogui.click()
     elif s == 8:
         find_and_click(get_asset("legacy.png"), 0.2)
         pyautogui.keyDown('enter')
         pyautogui.keyUp('enter')
-        time.sleep(2)
+        time.sleep(4)
     elif s == 9:
         find_and_click(get_asset("reincarnate.png"), 0.2)
         pyautogui.keyDown('enter')
