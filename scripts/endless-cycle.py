@@ -94,7 +94,7 @@ def find_and_click(image_name, click_delay=0.5, double_move=True, shift=False):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-TOTAL_STEPS = 7
+TOTAL_STEPS = 9
 def step(s):
     if not (in_cookie_clicker() and active): return False
 
@@ -110,8 +110,12 @@ def step(s):
         pyautogui.scroll(-10)
     elif s == 5:
         find_and_click(get_asset("you.png"), 0.2, shift=True)
-    elif s == TOTAL_STEPS - 1:
+    elif s == 6:
         pyautogui.scroll(25)
+    elif s == 7:
+        find_and_click(get_asset("buy_all.png"), 0.2)
+    elif s == 8:
+        find_and_click(get_asset("buy_all.png"), 0.2)
     return True
 
 cur_step = 0
