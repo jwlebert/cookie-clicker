@@ -42,6 +42,17 @@ def get_active_app():
 def in_cookie_clicker():
     return get_active_app() == "Cookie Clicker"
 
+def get_asset(filename):
+    """Builds an absolute path to a file in the ../assets directory."""
+    # 1. Find the exact folder this python script is living in
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # 2. Go up one level (..), into 'assets', and append the filename
+    asset_path = os.path.join(script_dir, '..', 'assets', filename)
+    
+    # 3. Clean up the path (resolves the '..' into a proper absolute path)
+    return os.path.abspath(asset_path)
+
 def find_and_click(image_name, click_delay=0.5):
     try:
         # confidence=0.8 allows for slight color/rendering differences
@@ -76,9 +87,9 @@ def step(s):
     if not (in_cookie_clicker() and active): return False
 
     if s == 0:
-        print("todo")   
+        find_and_click(get_asset("buy_all.png"), 0.2)
     elif s == 1:
-        print("todo 2")
+        find_and_click(get_asset("cursor.png"), 0.2)
 
     return True
 
@@ -86,4 +97,4 @@ cur_step = 0
 while True:
     if step(cur_step):
         cur_step = (cur_step + 1) % TOTAL_STEPS
-    time.sleep(1)
+    time.sleep(3)
