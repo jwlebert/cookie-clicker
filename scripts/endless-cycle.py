@@ -47,10 +47,12 @@ TOTAL_STEPS = 2
 def step(s):
     if not (in_cookie_clicker() and active): return False
 
-    if s == 1:
+    if s == 0:
         print("todo")   
-    elif s == 2:
+    elif s == 1:
         print("todo 2")
+
+    return True
 
 cur_step = 0
 while True:
