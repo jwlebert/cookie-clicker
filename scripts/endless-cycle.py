@@ -16,8 +16,10 @@ import os
 pyautogui.FAILSAFE = True
 
 active = False
+test_requested = False
+
 def on_press(key):
-    global active
+    global active, test_requested
 
     if key == keyboard.Key.esc:
         print("Escape: exiting script.")
@@ -27,9 +29,16 @@ def on_press(key):
         if key.char == 'q':
             print(f"Toggle: switching to {not active}")
             active = not active
-        if key.char == 'l':
+        elif key.char == 'l':
             px, py = pyautogui.position()
-            print(px, py)
+            print(f"Mouse position: ({px}, {py})")
+        elif key.char == 't':
+            if not test_requested:
+                print("\n[Benchmark] Test hotkey pressed! Starting 5-ascension performance test...")
+                test_requested = True
+            else:
+                print("\n[Benchmark] Test cancelled.")
+                test_requested = False
     except AttributeError:
         pass
     
@@ -66,7 +75,7 @@ listener.start()
 
 TOTAL_STEPS = 8
 def step(s):
-    if not (in_cookie_clicker() and active): return False
+    if not (in_cookie_clicker() and (active or test_requested)): return False
 
     if s == 0 or s == 1:
         move_and_click(LOCATIONS['buy_all'])
@@ -93,12 +102,73 @@ def step(s):
         
     return True
 
+def run_benchmark(num_ascensions=5):
+    global test_requested
+    print(f"\n{'='*50}")
+    print(f" Starting Performance Benchmark ({num_ascensions} Ascensions)")
+    print(f"{'='*50}")
+
+    durations = []
+    for i in range(1, num_ascensions + 1):
+        if not test_requested:
+            print("[Benchmark] Aborted early.")
+            break
+
+        print(f"\n[Ascension {i}/{num_ascensions}] Starting cycle...")
+        cycle_start = time.time()
+
+        cur_step = 0
+        while cur_step < TOTAL_STEPS:
+            if not test_requested:
+                break
+            if not in_cookie_clicker():
+                time.sleep(0.5)
+                continue
+            if step(cur_step):
+                cur_step += 1
+            time.sleep(1)
+
+        if not test_requested:
+            break
+
+        cycle_duration = time.time() - cycle_start
+        durations.append(cycle_duration)
+        print(f"[Ascension {i}/{num_ascensions}] Completed in {cycle_duration:.2f}s")
+
+    if durations:
+        total_time = sum(durations)
+        avg_time = total_time / len(durations)
+        print(f"\n{'='*50}")
+        print(f" Benchmark Results ({len(durations)}/{num_ascensions} Ascensions Completed):")
+        print(f"   Total Time:           {total_time:.2f}s")
+        print(f"   Average / Ascension:  {avg_time:.2f}s")
+        print(f"   Fastest Ascension:    {min(durations):.2f}s")
+        print(f"   Slowest Ascension:    {max(durations):.2f}s")
+        print(f"   Individual Timings:   {[f'{d:.2f}s' for d in durations]}")
+        print(f"{'='*50}\n")
+
+    test_requested = False
+
 def start():
+    global test_requested
+    print("Endless Cycle bot initialized.")
+    print("Controls:")
+    print("  [q]   Toggle continuous loop on/off")
+    print("  [t]   Run 5-ascension benchmark test")
+    print("  [l]   Print current mouse position")
+    print("  [Esc] Exit script\n")
+
     cur_step = 0
     while True:
-        if step(cur_step):
-            cur_step = (cur_step + 1) % TOTAL_STEPS
-        time.sleep(1)
+        if test_requested:
+            run_benchmark(5)
+            cur_step = 0
+        elif active:
+            if step(cur_step):
+                cur_step = (cur_step + 1) % TOTAL_STEPS
+            time.sleep(1)
+        else:
+            time.sleep(0.2)
 
 if __name__ == '__main__':
     start()
