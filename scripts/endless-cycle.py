@@ -16,7 +16,22 @@ import os
 pyautogui.FAILSAFE = True
 
 active = False
-testing = False
+timings = []
+
+def print_timings():
+    if not timings:
+        print("\n[Timings] No completed cycles recorded yet.\n")
+        return
+    total = sum(timings)
+    avg = total / len(timings)
+    print(f"\n{'='*45}")
+    print(f" Performance Summary ({len(timings)} Cycles):")
+    print(f"   Total:    {total:.2f}s")
+    print(f"   Average:  {avg:.2f}s / cycle")
+    print(f"   Fastest:  {min(timings):.2f}s | Slowest: {max(timings):.2f}s")
+    print(f"   Latest:   {timings[-1]:.2f}s")
+    print(f"   History:  {[f'{t:.2f}s' for t in timings]}")
+    print(f"{'='*45}\n")
 
 def on_press(key):
     global active
@@ -33,8 +48,7 @@ def on_press(key):
             px, py = pyautogui.position()
             print(f"Position: ({px}, {py})")
         elif key.char == 't':
-            if not testing:
-                test()
+            print_timings()
     except AttributeError:
         pass
     
@@ -71,7 +85,7 @@ listener.start()
 
 TOTAL_STEPS = 8
 def step(s):
-    if not (in_cookie_clicker() and (active or testing)): return False
+    if not (in_cookie_clicker() and active): return False
 
     if s == 0 or s == 1:
         move_and_click(LOCATIONS['buy_all'])
@@ -98,54 +112,31 @@ def step(s):
         
     return True
 
-def test(num_cycles=5):
-    global testing
-    testing = True
-    print(f"\n{'='*45}\n Starting {num_cycles}-Cycle Test\n{'='*45}")
-
-    timings = []
-    for i in range(1, num_cycles + 1):
-        print(f"[Test] Cycle {i}/{num_cycles} starting...")
-        start_time = time.time()
-
-        for s in range(TOTAL_STEPS):
-            while not in_cookie_clicker():
-                time.sleep(0.5)
-            step(s)
-            time.sleep(1)
-
-        duration = time.time() - start_time
-        timings.append(duration)
-        print(f"[Test] Cycle {i}/{num_cycles} completed in {duration:.2f}s")
-
-    total = sum(timings)
-    avg = total / len(timings)
-    print(f"\n{'='*45}")
-    print(f" Test Summary ({num_cycles} Cycles):")
-    print(f"   Total:    {total:.2f}s")
-    print(f"   Average:  {avg:.2f}s / cycle")
-    print(f"   Fastest:  {min(timings):.2f}s | Slowest: {max(timings):.2f}s")
-    print(f"   Timings:  {[f'{t:.2f}s' for t in timings]}")
-    print(f"{'='*45}\n")
-
-    testing = False
-
 def start():
     print("Endless Cycle bot initialized.")
     print("Controls:")
     print("  [q]   Toggle loop on/off")
-    print("  [t]   Run 5-cycle performance test")
+    print("  [t]   Print cycle timings & summary")
     print("  [l]   Print current mouse position")
     print("  [Esc] Exit script\n")
 
     cur_step = 0
+    cycle_start = None
     while True:
-        if testing:
-            time.sleep(0.5)
-            continue
+        if active:
+            if cur_step == 0 and cycle_start is None:
+                cycle_start = time.time()
 
-        if active and step(cur_step):
-            cur_step = (cur_step + 1) % TOTAL_STEPS
+            if step(cur_step):
+                if cur_step == TOTAL_STEPS - 1 and cycle_start is not None:
+                    duration = time.time() - cycle_start
+                    timings.append(duration)
+                    print(f"[Cycle {len(timings)}] Completed in {duration:.2f}s")
+                    cycle_start = None
+                cur_step = (cur_step + 1) % TOTAL_STEPS
+        else:
+            cur_step = 0
+            cycle_start = None
 
         time.sleep(1 if active else 0.2)
 
