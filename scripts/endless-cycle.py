@@ -94,6 +94,18 @@ def find_and_click(image_name, click_delay=0.5, double_move=False, shift=False):
         print(f"Error finding {image_name}: {e}")
         return False
 
+LOCATIONS = {
+    "buy_all": (1340, 180),
+}
+
+def move_and_click(pos, shift=False):
+    px, py = pos
+    pyautogui.moveTo(px, py, duration=0.1)
+    
+    if shift: pyautogui.keyDown('shift')
+    pyautogui.click()
+    if shift: pyautogui.keyUp('shift')
+
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
@@ -102,9 +114,9 @@ def step(s):
     if not (in_cookie_clicker() and active): return False
 
     if s == 0:
-        find_and_click(get_asset("buy_all.png"), 0.2)
+        move_and_click(LOCATIONS['buy_all'])
         find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
-        find_and_click(get_asset("buy_all.png"), 0.2)
+        move_and_click(LOCATIONS['buy_all'])
     if s == 1:
         find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
     elif s == 2:
@@ -119,7 +131,7 @@ def step(s):
     elif s == 6:
         pyautogui.scroll(25)
     elif s == 7:
-        find_and_click(get_asset("buy_all.png"), 0.2, double_move=True)
+        move_and_click(LOCATIONS['buy_all'])
         time.sleep(1.0)
         pyautogui.click()
     elif s == 8:
