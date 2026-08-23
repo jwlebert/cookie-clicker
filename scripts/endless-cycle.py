@@ -135,8 +135,12 @@ def step(s):
         
     return True
 
-cur_step = 0
-while True:
-    if step(cur_step):
-        cur_step = (cur_step + 1) % TOTAL_STEPS
-    time.sleep(1)
+def start():
+    cur_step = 0
+    while True:
+        if step(cur_step):
+            cur_step = (cur_step + 1) % TOTAL_STEPS
+        time.sleep(1)
+
+if __name__ == '__main__':
+    start()
