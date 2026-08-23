@@ -27,6 +27,9 @@ def on_press(key):
         if key.char == 'q':
             print(f"Toggle: switching to {not active}")
             active = not active
+        if key.char == 'l':
+            px, py = pyautogui.position()
+            print(px, py)
     except AttributeError:
         pass
     
