@@ -138,13 +138,11 @@ def step(s):
         pyautogui.click()
     elif s == 8:
         move_and_click(LOCATIONS['legacy'])
-        pyautogui.keyDown('enter')
-        pyautogui.keyUp('enter')
+        pyautogui.press('enter')
         time.sleep(4)
     elif s == 9:
         move_and_click(LOCATIONS['reincarnate'])
-        pyautogui.keyDown('enter')
-        pyautogui.keyUp('enter')
+        pyautogui.press('enter')
         time.sleep(2)
         
     return True
