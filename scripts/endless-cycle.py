@@ -123,7 +123,6 @@ def step(s):
     elif s == 2:
         pyautogui.scroll(-10)
     elif s == 3: 
-        find_and_click(get_asset("prism.png"), 0.2, shift=True)
         find_and_click(get_asset("fractal.png"), 0.2, shift=True)
     elif s == 4:
         pyautogui.scroll(-10)
