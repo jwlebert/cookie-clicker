@@ -99,6 +99,7 @@ LOCATIONS = {
     "legacy": (1125, 100),
     "reincarnate": (710, 145),
     "cursor": (1225, 335),
+    "next_building": (1225, 895),
 }
 
 def move_and_click(pos, shift=False):
@@ -112,7 +113,7 @@ def move_and_click(pos, shift=False):
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
-TOTAL_STEPS = 10
+TOTAL_STEPS = 8
 def step(s):
     if not (in_cookie_clicker() and active): return False
 
@@ -120,25 +121,21 @@ def step(s):
         move_and_click(LOCATIONS['buy_all'])
         pyautogui.moveTo(*LOCATIONS['legacy'], 0.05) # move off of upgrade to collapse the upgrades
         move_and_click(LOCATIONS['cursor'], shift=True)
-    elif s == 2:
+    elif s == 2 or s == 3:
         pyautogui.scroll(-10)
-    elif s == 3: 
-        find_and_click(get_asset("fractal.png"), 0.2, shift=True)
+        move_and_click(LOCATIONS['next_building'], shift=True)
+        # first time 'next_building' is "fractal engine", second time it's "You"
     elif s == 4:
-        pyautogui.scroll(-10)
-    elif s == 5: 
-        find_and_click(get_asset("you.png"), 0.2, shift=True)
-    elif s == 6:
         pyautogui.scroll(25)
-    elif s == 7:
+    elif s == 5:
         move_and_click(LOCATIONS['buy_all'])
         time.sleep(1.0)
         pyautogui.click()
-    elif s == 8:
+    elif s == 6:
         move_and_click(LOCATIONS['legacy'])
         pyautogui.press('enter')
         time.sleep(4)
-    elif s == 9:
+    elif s == 7:
         move_and_click(LOCATIONS['reincarnate'])
         pyautogui.press('enter')
         time.sleep(1)
