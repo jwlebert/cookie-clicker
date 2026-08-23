@@ -98,6 +98,7 @@ LOCATIONS = {
     "buy_all": (1340, 180),
     "legacy": (1125, 100),
     "reincarnate": (710, 145),
+    "cursor": (1225, 335),
 }
 
 def move_and_click(pos, shift=False):
@@ -115,12 +116,10 @@ TOTAL_STEPS = 10
 def step(s):
     if not (in_cookie_clicker() and active): return False
 
-    if s == 0:
+    if s == 0 or s == 1:
         move_and_click(LOCATIONS['buy_all'])
-        find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
-        move_and_click(LOCATIONS['buy_all'])
-    if s == 1:
-        find_and_click(get_asset("cursor.png"), 0.2, double_move=True, shift=True)
+        pyautogui.moveTo(*LOCATIONS['legacy'], 0.05) # move off of upgrade to collapse the upgrades
+        move_and_click(LOCATIONS['cursor'], shift=True)
     elif s == 2:
         pyautogui.scroll(-10)
     elif s == 3: 
