@@ -143,7 +143,7 @@ def step(s):
     elif s == 9:
         move_and_click(LOCATIONS['reincarnate'])
         pyautogui.press('enter')
-        time.sleep(2)
+        time.sleep(1)
         
     return True
 
