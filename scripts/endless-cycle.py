@@ -97,6 +97,7 @@ def find_and_click(image_name, click_delay=0.5, double_move=False, shift=False):
 LOCATIONS = {
     "buy_all": (1340, 180),
     "legacy": (1125, 100),
+    "reincarnate": (710, 145),
 }
 
 def move_and_click(pos, shift=False):
@@ -141,7 +142,7 @@ def step(s):
         pyautogui.keyUp('enter')
         time.sleep(4)
     elif s == 9:
-        find_and_click(get_asset("reincarnate.png"), 0.2)
+        move_and_click(LOCATIONS['reincarnate'])
         pyautogui.keyDown('enter')
         pyautogui.keyUp('enter')
         time.sleep(2)
